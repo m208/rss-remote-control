@@ -2,6 +2,7 @@ import { httpServer } from "./src/http_server/index";
 import { WebSocketServer, createWebSocketStream } from 'ws';
 import { runCommand } from "./src/ws_server/cli";
 import { readFile } from 'node:fs/promises';
+import { removeTempDirectory } from "./src/ws_server/deleteTempFiles";
 
 const HTTP_PORT = 8181;
 const WS_PORT = 8080;
@@ -23,6 +24,7 @@ wsServer.on('connection', function connection(ws) {
     if (responce && responce.type === 'file') {
       try {
         msg = await readFile(responce.data, {encoding: 'base64'});
+        removeTempDirectory(responce.data);
       }
       catch { }
     } 
