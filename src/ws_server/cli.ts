@@ -1,7 +1,13 @@
-import { actions } from "./controlsActions";
+import { actions } from "./mouseActions";
+import { makeScreenShot } from "./sreeenCapture";
 
 interface CommandsMap {
-    [index: string]: (dim1: number, dim2: number) => void | Promise<string> ;
+    [index: string]: (dim1: number, dim2: number) => void | Promise<CmdResponce> ;
+}
+
+interface CmdResponce {
+    data: string ;
+    type?: string; 
 }
 
 export const runCommand = (command: string) => {
@@ -17,7 +23,17 @@ export const runCommand = (command: string) => {
         'draw_square' : (size: number) => { actions.drawRect(size) },
         'draw_circle' : (radius: number) => { actions.drawCircle(radius) },
 
-        'mouse_position' : () => { return actions.getPos() },
+        'mouse_position' : async () => { 
+            const pos = await actions.getPos();
+            return { data: pos};
+        },
+        'prnt_scrn' : async () => { 
+            const imgPath = await makeScreenShot();
+            return {
+                data: imgPath,
+                type: 'file'
+            } 
+        }
     };
 
     if (Object.keys(commands).includes(cmd)) {
