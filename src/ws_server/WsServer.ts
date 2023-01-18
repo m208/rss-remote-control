@@ -16,8 +16,8 @@ export class WSServer {
             const duplex = createWebSocketStream(ws, { decodeStrings: false });
             duplex.on('data', async (data) => {
               console.log('received: %s', data);
-              const responce = await runCommand(data.toString());
-              const msg = responce? responce.data : '';
+              const response = await runCommand(data.toString());
+              const msg = response? response.data : '';
              
               duplex.write(`${data.toString().split(' ')[0]} ${msg}`);
             });

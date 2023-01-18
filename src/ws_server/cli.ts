@@ -2,10 +2,10 @@ import { actions } from "./mouseActions";
 import { makeScreenShot } from "./sreeenCapture";
 
 interface CommandsMap {
-    [index: string]: (dim1: number, dim2: number) => void | Promise<CmdResponce> ;
+    [index: string]: (dim1: number, dim2: number) => void | Promise<CmdResponse> ;
 }
 
-interface CmdResponce {
+interface CmdResponse {
     data: string ;
     type?: string; 
 }
