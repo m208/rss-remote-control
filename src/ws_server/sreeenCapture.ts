@@ -1,21 +1,13 @@
-import { FileType, screen, Region, mouse } from "@nut-tree/nut-js";
-import { resolve } from "path";
-
-const screenShotPath = resolve(__dirname, "..", "temp");
-const screenShotFileName = "screenshot";
+import { screen, Region, mouse } from "@nut-tree/nut-js";
+import Jimp from 'jimp';
 
 export const makeScreenShot = async () => {
     const cursorPos = await mouse.getPosition();
-    const region = new Region(cursorPos.x, cursorPos.y, 200, 200 );
-    let imgPath = '';
+    const img = await screen.grabRegion(new Region(cursorPos.x, cursorPos.y, 200, 200 ));
 
-    try {
-        imgPath = await screen.captureRegion(screenShotFileName, region, FileType.PNG, screenShotPath);
-    } catch {
-        console.log('Error: Captured region is outside of display');
-    }
+    const imgData = await new Jimp(await img.toRGB()).getBase64Async(Jimp.MIME_PNG);    
 
-    return imgPath;
+    return imgData.replace('data:image/png;base64,', '');
 } 
 
 

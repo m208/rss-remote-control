@@ -23,17 +23,9 @@ export const runCommand = (command: string) => {
         'draw_square' : (size: number) => { actions.drawRect(size) },
         'draw_circle' : (radius: number) => { actions.drawCircle(radius) },
 
-        'mouse_position' : async () => { 
-            const pos = await actions.getPos();
-            return { data: pos};
-        },
-        'prnt_scrn' : async () => { 
-            const imgPath = await makeScreenShot();
-            return {
-                data: imgPath,
-                type: 'file'
-            } 
-        }
+        'mouse_position' : async () => ( { data: await actions.getPos() } ),  
+        'prnt_scrn' : async () => ( { data: await makeScreenShot() } )
+        
     };
 
     if (Object.keys(commands).includes(cmd)) {

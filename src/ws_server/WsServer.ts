@@ -1,7 +1,5 @@
-import { readFile } from "fs/promises";
 import { WebSocketServer, WebSocket, Server, createWebSocketStream} from "ws";
 import { runCommand } from "./cli";
-import { removeTempDirectory } from "./deleteTempFiles";
 
 interface WsServerOptions {
     port: number;
@@ -19,15 +17,8 @@ export class WSServer {
             duplex.on('data', async (data) => {
               console.log('received: %s', data);
               const responce = await runCommand(data.toString());
-              let msg = responce? responce.data : '';
-          
-              if (responce && responce.type === 'file') {
-                try {
-                  msg = await readFile(responce.data, {encoding: 'base64'});
-                  removeTempDirectory(responce.data);
-                }
-                catch { }
-              } 
+              const msg = responce? responce.data : '';
+             
               duplex.write(`${data.toString().split(' ')[0]} ${msg}`);
             });
             duplex.on('close', () => { 
