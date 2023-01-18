@@ -36,10 +36,7 @@ export const actions = {
     drawCircle: async (radius: number) => {
         const currentPosition = await mouse.getPosition();
         
-        const center: Point = {
-            x: currentPosition.x - radius,
-            y: currentPosition.y,
-        };
+        const center = new Point (currentPosition.x - radius, currentPosition.y);
         const dots = getPathForCircle(radius, center);
        
         await mouse.pressButton(Button.LEFT);
@@ -54,11 +51,11 @@ function getPathForCircle(radius: number, center: Point) {
     const dots: Array<Point> = [];
     
     for (let i = 360; i >= 0; i--) {
-        dots.push({
-            x: center.x + radius * Math.cos(i * Math.PI / 180),
-            y: center.y + radius * Math.sin(i * Math.PI / 180)
-        });
-    };
+        dots.push(new Point(
+            center.x + radius * Math.cos(i * Math.PI / 180),
+            center.y + radius * Math.sin(i * Math.PI / 180)
+        ));
+    }
 
     return dots;
 }
